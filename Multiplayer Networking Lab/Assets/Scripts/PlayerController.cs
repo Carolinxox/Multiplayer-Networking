@@ -23,11 +23,12 @@ public class PlayerController : NetworkBehaviour
 
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            Fire();
+            CmdFire();
         }
     }
 
-    void Fire()
+    [Command]
+    void CmdFire()
     {
         // Create the Bullet from the Bullet Prefab
         var bullet = (GameObject)Instantiate(
@@ -37,6 +38,9 @@ public class PlayerController : NetworkBehaviour
 
         // Add velocity to the bullet
         bullet.GetComponent<Rigidbody>().velocity = bullet.transform.forward * 6;
+
+        // Spawn the bullet on the Clients
+        NetworkServer.Spawn(bullet);
 
         // Destroy the bullet after 2 seconds
         Destroy(bullet, 2.0f);
